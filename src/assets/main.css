@@ -39,18 +39,25 @@ body {
   margin: 40px auto;
 }
 
-.container form input {
-  padding: 15px 35px;
+.container form textarea {
+  padding: 15px;
   border-radius: 10px;
   border: 1px solid gray;
   flex-grow: 1;
   font-size: 18px;
+  resize: none;
+  height: 70px !important;
+}
+
+.container form textarea::-webkit-scrollbar {
+  display: none;
 }
 
 .container form .btn.add {
   background: green;
 }
-.container form .btn.edit-1 {
+
+.container form .btn.edit {
   background: gold;
 }
 
@@ -73,6 +80,36 @@ body {
 
 .container ul li p {
   font-size: 20px;
+  text-align: left;
+  width: 700px;
+  height: 70px;
+  overflow-y: scroll;
+}
+
+/* width */
+.container ul li p::-webkit-scrollbar {
+  display: none;
+}
+
+.container ul li p.long::-webkit-scrollbar {
+  display: block;
+  width: 10px;
+}
+
+/* Track */
+.container ul li p.long::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+/* Handle */
+.container ul li p.long::-webkit-scrollbar-thumb {
+  background: gray;
+  border-radius: 20px;
+}
+
+/* Handle on hover */
+.container ul li p.long::-webkit-scrollbar-thumb:hover {
+  background: gold;
 }
 
 .container ul li .btns {

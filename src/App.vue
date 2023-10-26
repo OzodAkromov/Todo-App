@@ -2,22 +2,23 @@
   <div class="container">
     <h1>{{ title }}</h1>
 
-    <form v-on:submit.prevent>
-      <input type="text" v-bind:placeholder="plc" v-model.trim="inputValue">
-      <button class="btn add" v-if="!edit" v-on:click="addTask">Add</button>
-      <button class="btn edit-1" v-if="edit" @click="editTask" v-on:click="addTask">Edit</button>
+    <form @submit.prevent>
+      <textarea type="text" :placeholder="plc" v-model.trim="inputValue"></textarea>
+      <button v-if="!isEditing" class="btn add" @click="addTask">Add</button>
+      <button v-else class="btn edit" @click="saveTask(index)">Save</button>
     </form>
     <hr>
     <ul v-if="taskArray.length">
-      <li v-for="(item, index) in taskArray">
-        <p>
+      <li v-for="(item, index) in taskArray" :key="item">
+        <p :class="{ long: item.length > 155 }">
           {{ index + 1 }}.
           {{ item }}
         </p>
 
         <div class="btns">
-          <button class="btn del" v-on:click="deleteTask(index)">Delete</button>
-          <button class="btn edit" @click="todo(index)">Edit</button>
+          <button v-if="!isEditing" class="btn del" @click="deleteTask(index)">Delete</button>
+          <button class="btn edit" @click="editTask(item, index)">Edit</button>
+          <!-- v-if="!clickedIndex != index" -->
         </div>
       </li>
     </ul>
@@ -32,12 +33,9 @@ export default {
       title: 'to do list',
       plc: 'Write a task',
       inputValue: '',
-      taskArray: [
-        'Make a cup of coffee',
-        'Do a homework'
-      ],
-      edit: false,
-      taskIndex: ''
+      taskArray: [],
+      isEditing: false,
+      clickedIndex: null,
     }
   },
   methods: {
@@ -48,16 +46,21 @@ export default {
       this.inputValue = ''
     },
     deleteTask(taskIndex) {
-      this.taskArray.splice(taskIndex, 1)
+      const answer = confirm('Are you sure to delete?')
+      if (answer) {
+        this.taskArray.splice(taskIndex, 1)
+      } else {
+        alert('You cancelled action!')
+      }
     },
-    todo(index) {
-      this.inputValue = this.taskArray[index]
-      this.edit = true
-      this.taskIndex = index
+    editTask(taskValue, taskIndex) {
+      this.isEditing = true
+      this.inputValue = taskValue
+      this.clickedIndex = taskIndex
     },
-    editTask() {
-      this.taskArray[this.taskIndex] = this.inputValue
-      this.edit = false
+    saveTask() {
+      this.taskArray[this.clickedIndex] = this.inputValue
+      this.isEditing = !this.isEditing
       this.inputValue = ''
     }
   },
